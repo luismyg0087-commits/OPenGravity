@@ -1,4 +1,4 @@
-import { Bot } from 'grammy';
+import { Bot, InputFile } from 'grammy';
 import { processUserMessage } from '../agent/index.js';
 import { transcribeAudio } from '../agent/llm.js';
 import { config } from '../config.js';
@@ -18,7 +18,13 @@ export function setupHandlers(bot: Bot) {
     
     try {
       const response = await processUserMessage(ctx.from.id, ctx.message.text);
-      await ctx.reply(response, { parse_mode: 'Markdown' });
+      if (response.startsWith('VOICE_FILE_PATH:')) {
+        const filePath = response.replace('VOICE_FILE_PATH:', '');
+        await ctx.replyWithVoice(new InputFile(filePath));
+        fs.unlinkSync(filePath);
+      } else {
+        await ctx.reply(response, { parse_mode: 'Markdown' });
+      }
     } catch (error: any) {
       console.error("Agent error:", error);
       await ctx.reply('An error occurred while processing your message.');
@@ -51,12 +57,16 @@ export function setupHandlers(bot: Bot) {
       const transcribedText = await transcribeAudio(tempFilePath);
       console.log(`📝 Transcribed text: ${transcribedText}`);
       
-      // Notify user of transcription (optional but helpful)
-      // await ctx.reply(`_Transcribed:_ ${transcribedText}`, { parse_mode: 'Markdown' });
-
       // Process with agent
       const agentResponse = await processUserMessage(ctx.from.id, transcribedText);
-      await ctx.reply(agentResponse, { parse_mode: 'Markdown' });
+      
+      if (agentResponse.startsWith('VOICE_FILE_PATH:')) {
+        const outFilePath = agentResponse.replace('VOICE_FILE_PATH:', '');
+        await ctx.replyWithVoice(new InputFile(outFilePath));
+        fs.unlinkSync(outFilePath);
+      } else {
+        await ctx.reply(agentResponse, { parse_mode: 'Markdown' });
+      }
       
       // Cleanup
       fs.unlinkSync(tempFilePath);

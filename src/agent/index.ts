@@ -68,6 +68,12 @@ export async function processUserMessage(userId: number, text: string): Promise<
           content: toolResultStr,
           tool_call_id: toolCall.id
         });
+
+        // SPECIAL CASE: If the tool is 'speak', we might want to break early 
+        // or return the file path so the handler can send a voice note.
+        if (toolResultStr.startsWith('VOICE_FILE_PATH:')) {
+            return toolResultStr;
+        }
       }
       // Continue the loop to let the LLM see the tool outputs
     } else {

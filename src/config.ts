@@ -13,6 +13,7 @@ const envSchema = z.object({
   OPENROUTER_MODEL: z.string().default("openrouter/free"),
   FIREBASE_SERVICE_ACCOUNT_PATH: z.string().default("./service-account.json"),
   FIREBASE_SERVICE_ACCOUNT_JSON: z.string().optional(),
+  ELEVENLABS_API_KEY: z.string().optional(),
 });
 
 // Parse and validate

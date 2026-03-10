@@ -1,4 +1,5 @@
 import { getCurrentTimeTool } from './get_current_time.js';
+import { speakTool } from './speak.js';
 
 export interface Tool<T = any> {
   name: string;
@@ -8,7 +9,8 @@ export interface Tool<T = any> {
 }
 
 export const tools: Tool[] = [
-  getCurrentTimeTool
+  getCurrentTimeTool,
+  speakTool
 ];
 
 export const getToolByName = (name: string) => tools.find(t => t.name === name);
