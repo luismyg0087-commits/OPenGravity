@@ -2,7 +2,7 @@ import { textToSpeech } from "../agent/tts.js";
 
 export const speakTool = {
   name: "speak",
-  description: "Converts text to speech and prepares a voice note to be sent to the user. Use this when the user asks you to talk, speak, or send a voice message.",
+  description: "ONLY use this if the user explicitly asks for a voice note. Converts text to speech and prepares a voice note. Do not use for normal text replies.",
   parameters: {
     type: "object",
     properties: {
