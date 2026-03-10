@@ -3,6 +3,7 @@ import OpenAI from 'openai';
 import { config } from '../config.js';
 import { tools } from '../tools/index.js';
 import { MessageRow } from '../memory/index.js';
+import fs from 'fs';
 
 const groq = new Groq({ apiKey: config.GROQ_API_KEY });
 const openrouter = config.OPENROUTER_API_KEY
@@ -78,5 +79,24 @@ export async function callLLM(messages: MessageRow[], useFallback = false) {
       return callLLM(messages, true);
     }
     throw error;
+  }
+}
+
+/**
+ * Transcribes audio file using Groq Whisper
+ */
+export async function transcribeAudio(filePath: string): Promise<string> {
+  console.log(`🎤 Transcribing audio file: ${filePath}`);
+  try {
+    const transcription = await groq.audio.transcriptions.create({
+      file: fs.createReadStream(filePath),
+      model: 'whisper-large-v3',
+      response_format: 'text',
+    });
+    
+    return transcription as any; // Groq returns text string when response_format is 'text'
+  } catch (error) {
+    console.error('Transcription error:', error);
+    throw new Error('Failed to transcribe audio.');
   }
 }
