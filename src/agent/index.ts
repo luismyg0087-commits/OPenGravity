@@ -26,8 +26,8 @@ export async function processUserMessage(userId: number, text: string): Promise<
   while (iterations < MAX_ITERATIONS) {
     iterations++;
     
-    // Fetch conversation history
-    const history = await memory.getMessages(userId);
+    // Fetch conversation history - limit to last 10 messages to avoid token limits
+    const history = await memory.getMessages(userId, 10);
     
     const messages = [
       { role: 'system' as const, content: SYSTEM_PROMPT },

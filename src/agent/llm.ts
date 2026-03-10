@@ -53,11 +53,18 @@ export async function callLLM(messages: MessageRow[], useFallback = false) {
     return { role: msg.role, content: msg.content };
   });
 
+  // Basic token trimming: if the total content length is too high, remove oldest messages
+  // (leaving system prompt at index 0)
+  let trimmedMessages = [...formattedMessages];
+  while (trimmedMessages.length > 2 && JSON.stringify(trimmedMessages).length > 20000) {
+    trimmedMessages.splice(1, 1); // Remove the oldest message (excluding system)
+  }
+
   try {
     if (useFallback && openrouter) {
        const response = await openrouter.chat.completions.create({
          model: config.OPENROUTER_MODEL,
-         messages: formattedMessages as any,
+         messages: trimmedMessages as any,
          tools: formattedTools.length > 0 ? formattedTools : undefined,
          tool_choice: 'auto'
        });
@@ -66,7 +73,7 @@ export async function callLLM(messages: MessageRow[], useFallback = false) {
 
     const response = await groq.chat.completions.create({
       model: 'llama-3.3-70b-versatile',
-      messages: formattedMessages as any,
+      messages: trimmedMessages as any,
       tools: formattedTools.length > 0 ? formattedTools : undefined,
       tool_choice: 'auto'
     });
