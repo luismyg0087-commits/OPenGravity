@@ -2,6 +2,7 @@ import { getCurrentTimeTool } from './get_current_time.js';
 import { speakTool } from './speak.js';
 import { writeFileTool, readFileTool } from './files.js';
 import { runCommandTool } from './terminal.js';
+import { browseWebTool } from './browser.js';
 
 export interface Tool<T = any> {
   name: string;
@@ -15,7 +16,8 @@ export const tools: Tool[] = [
   speakTool,
   writeFileTool,
   readFileTool,
-  runCommandTool
+  runCommandTool,
+  browseWebTool
 ];
 
 export const getToolByName = (name: string) => tools.find(t => t.name === name);

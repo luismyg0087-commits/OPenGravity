@@ -19,11 +19,13 @@
     "grammy": "^1.41.1",
     "groq-sdk": "^0.37.0",
     "openai": "^6.27.0",
+    "puppeteer": "^24.39.0",
     "zod": "^4.3.6"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
     "@types/node": "^25.4.0",
+    "@types/puppeteer": "^5.4.7",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   }

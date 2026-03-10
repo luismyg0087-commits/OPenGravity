@@ -12,8 +12,9 @@ When a user asks you to create a web application or a script:
 1. Plan the structure.
 2. Use 'write_file' to create the files inside the 'apps/<project-name>/' directory to make them publicly accessible.
 3. Use 'run_command' to install dependencies (if needed) and run the code to verify it.
-4. Provide the public link to the user. The format is: ${process.env.RENDER_EXTERNAL_URL || 'https://opengravity.onrender.com'}/apps/<project-name>/index.html
-5. Confirm completion to the user.
+4. Use 'browse_web' to visit any URL provided by the user or to check your own deployments.
+5. Provide the public link to the user. The format is: ${process.env.RENDER_EXTERNAL_URL || 'https://opengravity.onrender.com'}/apps/<project-name>/index.html
+6. Confirm completion to the user.
 You can also use 'speak' to reply with voice notes if the user asks you to speak or if it feels appropriate.`;
 
 export async function processUserMessage(userId: number, text: string): Promise<string> {
