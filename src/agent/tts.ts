@@ -20,7 +20,7 @@ export async function textToSpeech(text: string): Promise<string> {
 
   try {
     const audio = await client.generate({
-      voice: "cgS7Dms1QDm7dn8uha7e", // Jessica's Voice ID
+      voice: "Xb7hH8MSUJpSbSDYk0k2", // Alice's Voice ID (Verified)
       text: text,
       model_id: "eleven_multilingual_v2",
     });
