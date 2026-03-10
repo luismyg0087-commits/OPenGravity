@@ -29,13 +29,18 @@ export async function textToSpeech(text: string): Promise<string> {
     const fileName = `tts_${Date.now()}.mp3`;
     const filePath = path.join(tempDir, fileName);
     
+    // The ElevenLabs SDK returns a stream that can be consumed
     const fileStream = fs.createWriteStream(filePath);
     
-    // The 'audio' is a Readable Stream
+    for await (const chunk of audio as any) {
+        fileStream.write(chunk);
+    }
+    fileStream.end();
+
+    // Wait for the stream to actually finish writing
     await new Promise((resolve, reject) => {
-      audio.pipe(fileStream);
-      fileStream.on("finish", resolve);
-      fileStream.on("error", reject);
+        fileStream.on('finish', resolve);
+        fileStream.on('error', reject);
     });
 
     return filePath;
